@@ -1,0 +1,6 @@
+vendor
+bin
+*.log
+*.lock
+*.phar
+*.xml
