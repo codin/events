@@ -48,9 +48,6 @@ class EventDispatcher implements Contracts\EventDispatcher, EventDispatcherInter
 
     /**
      * Get listeners for event as a single iterator
-     *
-     * @param object $event
-     * @return iterable[callable]
      */
     public function getListenersForEvent(object $event): iterable
     {

@@ -37,7 +37,7 @@
         ],
         "test": [
             "phpstan analyse --no-progress --no-ansi --configuration=phpstan.neon",
-            "phpspec run --no-coverage --no-ansi --no-interaction --format=dot"
+            "phpspec run --no-ansi --no-interaction --format=dot"
         ],
         "uninstall": [
             "rm -rf ./bin",
