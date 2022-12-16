@@ -11,7 +11,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
-class EventDispatcher implements EventDispatcherInterface
+class EventDispatcher implements Contracts\EventDispatcher, EventDispatcherInterface
 {
     /**
      * @var ArrayIterator<int, ListenerProviderInterface>
@@ -52,14 +52,14 @@ class EventDispatcher implements EventDispatcherInterface
      * @param object $event
      * @return AppendIterator
      */
-    protected function getListenersForEvent(object $event): iterable
+    public function getListenersForEvent(object $event): iterable
     {
         $appendIterator = new AppendIterator();
 
         foreach ($this->listeners as $listener) {
             $iterable = $listener->getListenersForEvent($event);
 
-            if (is_array($iterable)) {
+            if (\is_array($iterable)) {
                 $iterable = new ArrayIterator($iterable);
             }
 
@@ -82,7 +82,12 @@ class EventDispatcher implements EventDispatcherInterface
         }
 
         foreach ($this->getListenersForEvent($event) as $callable) {
+            if (!\is_callable($callable)) {
+                throw Exceptions\ListenerError::notCallable($callable, $event);
+            }
+
             $callable($event);
+
             if ($event instanceof StoppableEventInterface && $event->isPropagationStopped()) {
                 break;
             }
